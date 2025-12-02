@@ -1,0 +1,104 @@
+<div class="dashboard-container">
+    <!-- Top Stats Section -->
+    <div class="stats-section">
+        <div class="stat-card">
+            <div class="stat-icon">📁</div>
+            <div class="stat-info">
+                <h3>{{ projects.length }}</h3>
+                <p>Total Projects</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">✓</div>
+            <div class="stat-info">
+                <h3>{{ projects.length }}</h3>
+                <p>Active Projects</p>
+            </div>
+        </div>
+        <!-- Task stats removed for 60% version -->
+    </div>
+
+    <!-- Your Projects Section -->
+    <div class="projects-section">
+        <div class="section-header">
+            <h2>📂 Your Projects</h2>
+            <p class="subtitle">Projects you own and manage</p>
+        </div>
+
+        <div class="projects-grid" *ngIf="projects.length > 0">
+            <div class="project-card-modern" *ngFor="let project of projects">
+                <div class="card-header-modern">
+                    <div class="field-group">
+                        <span class="field-label">Project Name</span>
+                        <div class="project-title">
+                            <h3>{{ project.name }}</h3>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <span class="status-badge active">● Active</span>
+                                <button class="btn-edit-project" (click)="editProject(project)" title="Edit Project">
+                                    ✏️
+                                </button>
+                                <button class="btn-delete-project"
+                                    (click)="deleteProject(project.projectId || project.projectID)"
+                                    title="Delete Project">
+                                    🗑️
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="field-group">
+                        <span class="field-label">Description</span>
+                        <p class="project-desc">{{ project.description }}</p>
+                    </div>
+                </div>
+
+                <div class="project-footer">
+                    <div class="project-meta-info">
+                        <span class="meta-item" *ngIf="project.dueDate">
+                            <i class="icon">📅</i> Due: {{ project.dueDate | date:'MMM d, y' }}
+                        </span>
+                        <span class="meta-item" *ngIf="project.createdBy">
+                            <i class="icon">👤</i> Created by: {{ project.createdBy.name }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state-modern" *ngIf="projects.length === 0">
+            <div class="empty-icon">🎯</div>
+            <h3>No Projects Yet</h3>
+            <p>Create your first project to get started with task management</p>
+            <button class="btn-primary" routerLink="/projects">
+                ➕ Create Your First Project
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Project Modal -->
+<div class="modal-overlay" *ngIf="showEditModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Edit Project</h3>
+            <button class="btn-close" (click)="closeEditModal()">×</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>Project Name</label>
+                <input type="text" [(ngModel)]="editingProject.name" class="form-control">
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                <textarea [(ngModel)]="editingProject.description" rows="3" class="form-control"></textarea>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-secondary" (click)="closeEditModal()">Cancel</button>
+            <button class="btn-primary" (click)="saveProjectChanges()">Save Changes</button>
+        </div>
+    </div>
+</div>

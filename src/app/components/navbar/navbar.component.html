@@ -1,0 +1,39 @@
+<nav class="navbar">
+    <div class="navbar-brand">
+        <a routerLink="/" class="logo">📊 Project Tracker</a>
+    </div>
+
+    <div class="navbar-menu" *ngIf="authService.isAuthenticated()">
+        <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+        <a routerLink="/projects" routerLinkActive="active">Projects</a>
+
+
+        <div class="session-timer" *ngIf="remainingTime">
+            <span>⏳ {{ remainingTime }}</span>
+        </div>
+
+        <div class="user-menu">
+            <button class="user-button" (click)="toggleUserMenu()">
+                <span class="user-avatar">{{ getUserInitials() }}</span>
+                <span class="user-name">{{ getUserName() }}</span>
+                <span class="dropdown-arrow">▼</span>
+            </button>
+
+            <div class="user-dropdown" *ngIf="showUserMenu">
+                <div class="dropdown-header">
+                    <p class="user-email">{{ authService.getUser()?.email }}</p>
+                    <p class="user-role" *ngIf="authService.isAdmin()"
+                        style="font-size: 0.75rem; color: #f59e0b; font-weight: 600; margin-top: 0.25rem;">👑 ADMIN</p>
+                </div>
+                <button class="dropdown-item" (click)="logout()">
+                    <span>🚪</span> Logout
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="navbar-menu" *ngIf="!authService.isAuthenticated()">
+        <a routerLink="/login" routerLinkActive="active">Login</a>
+        <a routerLink="/register" routerLinkActive="active">Register</a>
+    </div>
+</nav>
